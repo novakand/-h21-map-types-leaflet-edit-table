@@ -5,9 +5,9 @@
 // TypeScript Version: 2.3
 
 declare module L {
-   
+
     interface EditableStatic {
-        new (map: Map, options: EditOptions): Editable;
+        new(map: Map, options: EditOptions): Editable;
     }
 
     interface EditOptions {
@@ -16,7 +16,7 @@ declare module L {
         markerClass?: object;
         drawingCSSClass?: string;
         editLayer?: LayerGroup<ILayer>;
-        featuresLayer?: LayerGroup<Polyline|Polygon|Marker>;
+        featuresLayer?: LayerGroup<Polyline | Polygon | Marker>;
         vertexMarkerClass?: object;
         middleMarkerClass?: object;
         polylineEditorClass?: object;
@@ -26,10 +26,10 @@ declare module L {
         skipMiddleMarkers?: boolean;
     }
 
-   
+
     interface Editable extends Mixin.LeafletMixinEvents {
         options: EditOptions;
-        currentPolygon: Polyline|Polygon|Marker;
+        currentPolygon: Polyline | Polygon | Marker | Circle;
         startPolyline(latLng?: LatLng, options?: PolylineOptions): Polyline;
         startPolygon(latLng?: LatLng, options?: PolylineOptions): Polygon;
         startMarker(latLng?: LatLng, options?: MarkerOptions): Marker;
@@ -40,7 +40,7 @@ declare module L {
     let Editable: EditableStatic;
 
     interface EditableMixin {
-       
+
         enableEdit(): any;
         disableEdit(): void;
         toggleEdit(): void;
@@ -54,7 +54,7 @@ declare module L {
         editTools: Editable;
     }
 
-    interface Polyline extends EditableMixin {}
+    interface Polyline extends EditableMixin { }
 
     namespace Map {
         interface MapOptions {
@@ -64,8 +64,8 @@ declare module L {
     }
 
     interface BaseEditor {
-        enable(): MarkerEditor|PolylineEditor|PolygonEditor;
-        disable(): MarkerEditor|PolylineEditor|PolygonEditor;
+        enable(): MarkerEditor | PolylineEditor | PolygonEditor;
+        disable(): MarkerEditor | PolylineEditor | PolygonEditor;
     }
 
     interface PathEditor extends BaseEditor {
@@ -78,18 +78,24 @@ declare module L {
         continueBackward(): void;
     }
 
- 
     interface PolygonEditor extends PathEditor {
 
         newHole(latlng: LatLng): void;
     }
 
-   
-    interface MarkerEditor extends BaseEditor {}
+    interface CircleEditor extends PathEditor {
 
-    interface Marker extends EditableMixin, MarkerEditor {}
+        newHole(latlng: LatLng): void;
+    }
 
-    interface Polyline extends EditableMixin, PolylineEditor {}
 
-    interface Polygon extends EditableMixin, PolygonEditor {}
+    interface MarkerEditor extends BaseEditor { }
+
+    interface Marker extends EditableMixin, MarkerEditor { }
+
+    interface Polyline extends EditableMixin, PolylineEditor { }
+
+    interface Polygon extends EditableMixin, PolygonEditor { }
+
+    interface Circle extends EditableMixin, CircleEditor { }
 }
